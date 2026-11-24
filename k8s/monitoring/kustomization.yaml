@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - prometheus.yaml
+  - grafana.yaml
+
+# Конфиги собираются из файлов; при их изменении хэш в имени меняется -> поды перезапускаются сами
+configMapGenerator:
+  - name: prometheus-config
+    namespace: monitoring
+    files:
+      - prometheus.yml
+  - name: grafana-dashboards
+    namespace: monitoring
+    files:
+      - dashboards/books-overview.json
